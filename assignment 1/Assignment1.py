@@ -6,4 +6,5 @@ import hashlib
 size = 16
 
 salt = os.urandom(size)
-print(salt)
+iv = os.urandom(size)
+print(iv)
