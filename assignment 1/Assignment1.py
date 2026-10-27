@@ -4,6 +4,7 @@ import secrets
 import hashlib
 import math
 
+# function hashes input b, n times
 def Hash_func(b, n):
     for _ in range(n):
         b = hashlib.sha256(b).hexdigest().encode()
@@ -32,6 +33,18 @@ def Binary(a):
         a //= 2
     return bin
 
+# function will encrypt file bin using AES key and initial Vector
+def CBC_Encrypt(plain_txt, key, in_vec):
+    blocks = [Block_Pad(plain_txt)]
+    cipher = ""
+
+
+def Block_Pad(message):
+    # 128 bits is 16 bytes
+    # hence mod 16
+    pad_len = 16 - len(message) % 16
+    padding = bytes([pad_len] * pad_len)
+    return message + padding
 
 # read generated salt from salt.txt
 salt_file = "Salt.txt"
@@ -55,5 +68,8 @@ p_con_s = b''.join([password, salt])
 # hash p||s 250x using SHA-256 from hashlib
 AES_key = Hash_func(p_con_s, 250)
 
+test_message = b'hello, my name is elder price, and I would like to share with you the most amazing book.'
 
-print(AES_key)
+ciphertext = Block_Pad(test_message)
+
+print(ciphertext)
