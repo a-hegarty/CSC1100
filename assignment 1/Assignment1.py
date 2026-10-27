@@ -9,6 +9,14 @@ size = 16
 salt = os.urandom(size) # generated salt, passed to Salt.txt
 iv = os.urandom(size) # generated IV, passed to IV.txt
 
+password = ''
+password = password.encode() # encode defaults to UTF-8
+
+p_con_s = password + salt # concatenate password with salt
+
+# hash p||s 250x using SHA-256 from hashlib
+AES_key = hashlib.sha256([p_con_s], usedforsecurity=True)
+
 # modular exponentiation function via GeeksforGeeks
 def Mod_expo(base, power, modulus):
     # power = Binary(power)
@@ -20,7 +28,8 @@ def Mod_expo(base, power, modulus):
         else: # if exponent is even
             base = (base * base) % modulus
             power //= 2
-    print(f"number -> {base} || power -> {power} || modulus -> {modulus} || result -> {y}")
+    # print(f"number -> {base} || power -> {power} || modulus -> {modulus} || result -> {y}")
+    return y
 
 
 # function to convert power to binary
@@ -31,6 +40,4 @@ def Binary(a):
         a //= 2
     return bin
 
-Mod_expo(123, 5, 511) # test, expected value 359
-Mod_expo(2, 37, 77) # test, expected value 51
-Mod_expo(51, 13, 77) # test, expected value 2
+print(hs)
