@@ -1,3 +1,6 @@
 the work provided is entirely my own, with the exception of:
 
+modular ecponentiation function
+    https://www.geeksforgeeks.org/dsa/modular-exponentiation-power-in-modular-arithmetic/#expected-approach-binary-exponentiation-method
+
 None of the work provided was generated using generative AI of any kind
