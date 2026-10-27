@@ -4,27 +4,25 @@ import secrets
 import hashlib
 import math
 
-size = 16
-
-salt = os.urandom(size) # generated salt
-iv = os.urandom(size) # generated IV
-
-# store generated salt to Salt.txt
+# read generated salt from salt.txt
 salt_file = "Salt.txt"
 with open(salt_file, mode="rb") as f:
     salt = f.read()
 
-#store generated IV to IV.txt
+# read generated IV from IV.txt
 iv_file = "IV.txt"
 with open(iv_file, mode="rb") as f:
     iv = f.read()
 
+#Read chosen password from Password.txt
 pass_file = 'Password.txt'
 with open(pass_file) as f:
     password = f.read()
 
 password = password.encode() # encode defaults to UTF-8
-p_con_s = password + salt
+
+print(salt)
+p_con_s = b''.join([password, salt])
 
 # hash p||s 250x using SHA-256 from hashlib
 #AES_key = hashlib.sha256([p_con_s], usedforsecurity=True)
@@ -52,4 +50,4 @@ def Binary(a):
         a //= 2
     return bin
 
-print(p_con_s)
+print("\n\n", p_con_s)
