@@ -9,13 +9,14 @@ size = 16
 salt = os.urandom(size) # generated salt, passed to Salt.txt
 iv = os.urandom(size) # generated IV, passed to IV.txt
 
-password = ''
+pass_file = 'Password.txt'
+with open(pass_file) as f:
+    password = f.read()
+
 password = password.encode() # encode defaults to UTF-8
 
-p_con_s = password + salt # concatenate password with salt
-
 # hash p||s 250x using SHA-256 from hashlib
-AES_key = hashlib.sha256([p_con_s], usedforsecurity=True)
+#AES_key = hashlib.sha256([p_con_s], usedforsecurity=True)
 
 # modular exponentiation function via GeeksforGeeks
 def Mod_expo(base, power, modulus):
@@ -40,4 +41,4 @@ def Binary(a):
         a //= 2
     return bin
 
-print(hs)
+print(password)
