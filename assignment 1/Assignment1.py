@@ -4,29 +4,11 @@ import secrets
 import hashlib
 import math
 
-# read generated salt from salt.txt
-salt_file = "Salt.txt"
-with open(salt_file, mode="rb") as f:
-    salt = f.read()
-
-# read generated IV from IV.txt
-iv_file = "IV.txt"
-with open(iv_file, mode="rb") as f:
-    iv = f.read()
-
-#Read chosen password from Password.txt
-pass_file = 'Password.txt'
-with open(pass_file) as f:
-    password = f.read()
-
-password = password.encode() # encode defaults to UTF-8
-
-print(salt)
-p_con_s = b''.join([password, salt])
-
-# hash p||s 250x using SHA-256 from hashlib
-#AES_key = hashlib.sha256([p_con_s], usedforsecurity=True)
-
+def Hash_func(b, n):
+    for _ in range(n):
+        b = hashlib.sha256(b)
+    return b
+    
 # modular exponentiation function via GeeksforGeeks
 def Mod_expo(base, power, modulus):
     # power = Binary(power)
@@ -50,4 +32,28 @@ def Binary(a):
         a //= 2
     return bin
 
-print("\n\n", p_con_s)
+
+# read generated salt from salt.txt
+salt_file = "Salt.txt"
+with open(salt_file, mode="rb") as f:
+    salt = f.read()
+
+# read generated IV from IV.txt
+iv_file = "IV.txt"
+with open(iv_file, mode="rb") as f:
+    iv = f.read()
+
+#Read chosen password from Password.txt
+#And encode with UTF-8
+pass_file = 'Password.txt'
+with open(pass_file, mode="rb") as f:
+    password = f.read()
+
+#concatenate password || salt
+p_con_s = b''.join([password, salt])
+
+# hash p||s 250x using SHA-256 from hashlib
+AES_key = Hash_func(p_con_s, 10)
+
+
+print("\n\n", AES_key)
