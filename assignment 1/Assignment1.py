@@ -6,7 +6,7 @@ import math
 
 def Hash_func(b, n):
     for _ in range(n):
-        b = hashlib.sha256(b)
+        b = hashlib.sha256(b).hexdigest().encode()
     return b
     
 # modular exponentiation function via GeeksforGeeks
@@ -53,7 +53,7 @@ with open(pass_file, mode="rb") as f:
 p_con_s = b''.join([password, salt])
 
 # hash p||s 250x using SHA-256 from hashlib
-AES_key = Hash_func(p_con_s, 10)
+AES_key = Hash_func(p_con_s, 250)
 
 
-print("\n\n", AES_key)
+print(AES_key)
