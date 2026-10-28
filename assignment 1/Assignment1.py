@@ -1,4 +1,3 @@
-import os
 import sys
 import secrets
 import hashlib
@@ -6,9 +5,10 @@ import math
 
 # function hashes input b, n times
 def Hash_func(b, n):
+    data = hashlib.sha256()
     for _ in range(n):
-        b = hashlib.sha256(b).hexdigest().encode()
-    return b
+        data.update(b)
+    return data.hexdigest()
     
 # modular exponentiation function via GeeksforGeeks
 def Mod_expo(base, power, modulus):
@@ -88,6 +88,6 @@ AES_key = Hash_func(p_con_s, 250)
 
 test_message = b"12345678901234567890"
 
-test_salt = secrets.token_bytes(5)
+test_salt = secrets.token_hex(8)
 
-print(test_salt)
+print(AES_key)
