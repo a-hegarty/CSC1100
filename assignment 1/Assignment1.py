@@ -43,8 +43,8 @@ def Block_Pad(message):
     # 128 bits is 16 bytes
     # hence mod 16
     pad_len = 16 - len(message) % 16
-    padding = bytes([pad_len] * pad_len)
-    return message + padding
+    padded_data = (b'\\0x00' * pad_len)
+    return message + padded_data
 
 # read generated salt from salt.txt
 salt_file = "Salt.txt"
