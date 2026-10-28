@@ -96,6 +96,12 @@ def Pad_Block(message):
         padded_data = (b'\\0x00' * pad_len)
         return message + padded_data
 
+#---------------------------------------------------------
+
+stdin = sys.argv[1]
+
+plaintext = stdin.encode()
+
 # read generated salt from salt.txt
 salt_file = "Salt.txt"
 with open(salt_file, mode="rb") as f:
@@ -117,8 +123,5 @@ p_con_s = b''.join([password, salt])
 # hash p||s 250x using SHA-256 from hashlib
 AES_key = Hash_func(p_con_s, 250).encode()
 
-test_message = b"123456789012"
-
-test = CBC_Chain(test_message, AES_key, init_vector)
-
-print(test)
+ciphertext = CBC_Chain(plaintext, AES_key, init_vector)
+print(ciphertext)
