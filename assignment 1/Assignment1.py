@@ -35,11 +35,25 @@ def Binary(a):
 
 # function will encrypt file bin using AES key and initial Vector
 def CBC_Encrypt(plain_txt, key, in_vec):
-    blocks = [Block_Pad(plain_txt)]
+    blocks = [Pad_Block(plain_txt)]
     cipher = ""
 
+# function will split message into blocks
+# first blocks will be 16 bytes long
+# next block is any remaining bytes to be padded
+# final block is the length of the message in hexadecimal
+def Split_Message(message):
+    blocks = [] 
 
-def Block_Pad(message):
+    #length of the block is multiplied by 8 to give the lenght of the message in bits
+    #length will be in bytes otherwise
+    length_block = hex(len(message) * 8).encode()
+    for i in range(0, len(message), 16):
+        blocks.append(message[i: i + 16])
+    blocks.append(length_block)
+    return blocks
+
+def Pad_Block(message):
     # 128 bits is 16 bytes
     # hence mod 16
     pad_len = 16 - len(message) % 16
@@ -60,7 +74,6 @@ with open(iv_file, mode="rb") as f:
     iv = f.read()
 
 #Read chosen password from Password.txt
-#And encode with UTF-8
 pass_file = 'Password.txt'
 with open(pass_file, mode="rb") as f:
     password = f.read()
@@ -71,8 +84,7 @@ p_con_s = b''.join([password, salt])
 # hash p||s 250x using SHA-256 from hashlib
 AES_key = Hash_func(p_con_s, 250)
 
-test_message = b'abcdefghijklmnop'
+test_message = b"12345678901234567890"
 
-ciphertext = Block_Pad(test_message)
-
-print(ciphertext)
+blocks = Split_Message(test_message)
+print(blocks)
