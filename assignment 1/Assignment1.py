@@ -2,11 +2,13 @@ import sys
 import secrets
 import hashlib
 import cryptography
+from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+from cryptography.hazmat.backends import default_backend
 
 # function hashes input b, n times
 def Hash_func(b, n):
     # data = hashlib.sha256() # produces 512 bit key
-    data = hashlib.md5() # produces 256 bit key as required by project spec
+    data = hashlib.md5() # produces 256 bit key as required by project specifications
     for _ in range(n):
         data.update(b)
     return data.hexdigest()
@@ -33,8 +35,14 @@ def Binary(a):
         a //= 2
     return bin
 
+# function 
 def AES_encrypt(key, input):
-    return 1
+   e = Cipher(algorithm=algorithms.AES(key), 
+                    mode=modes.ECB(), 
+                    backend=default_backend)
+   encryptor = e.encryptor()
+   em = encryptor.update(input)
+   return em
 
 # function will encrypt file bin using AES key and initial Vector
 def CBC_Chain(plain_txt, key, in_vec):
@@ -96,7 +104,7 @@ with open(salt_file, mode="rb") as f:
 # read generated IV from IV.txt
 iv_file = "IV.txt"
 with open(iv_file, mode="rb") as f:
-    iv = f.read()
+    init_vector = f.read()
 
 #Read chosen password from Password.txt
 pass_file = 'Password.txt'
@@ -107,6 +115,10 @@ with open(pass_file, mode="rb") as f:
 p_con_s = b''.join([password, salt])
 
 # hash p||s 250x using SHA-256 from hashlib
-AES_key = Hash_func(p_con_s, 250)
+AES_key = Hash_func(p_con_s, 250).encode()
 
-test_message = b"1234567890"
+test_message = b"123456789012"
+
+test = CBC_Chain(test_message, AES_key, init_vector)
+
+print(test)
