@@ -49,7 +49,8 @@ def Split_Message(message):
     #length will be in bytes otherwise
     length_block = hex(len(message) * 8).encode()
     for i in range(0, len(message), 16):
-        blocks.append(message[i: i + 16])
+        b = Pad_Block(message[i: i+ 16])
+        blocks.append(b)
     blocks.append(length_block)
     return blocks
 
