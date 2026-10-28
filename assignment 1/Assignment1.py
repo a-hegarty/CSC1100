@@ -1,11 +1,12 @@
 import sys
 import secrets
 import hashlib
-import math
+import cryptography
 
 # function hashes input b, n times
 def Hash_func(b, n):
-    data = hashlib.sha256()
+    # data = hashlib.sha256() # produces 512 bit key
+    data = hashlib.md5() # produces 256 bit key as required by project spec
     for _ in range(n):
         data.update(b)
     return data.hexdigest()
@@ -32,12 +33,34 @@ def Binary(a):
         a //= 2
     return bin
 
-# function will encrypt file bin using AES key and initial Vector
-def CBC_Encrypt(plain_txt, key, in_vec):
-    blocks = Split_Message(plain_txt)
-    for b in blocks:
-        print(b)
+def AES_encrypt(key, input):
+    return 1
 
+# function will encrypt file bin using AES key and initial Vector
+def CBC_Chain(plain_txt, key, in_vec):
+    blocks = Split_Message(plain_txt)
+    cipher_txt = b''
+
+    #xor initial vector with the first block
+    input = bytes( a ^ b for a, b in zip(in_vec, blocks[0]))
+
+    #pass key and input to AES function
+    cipher = AES_encrypt(key, input)
+
+    #ciphertext becomes the current ciphertext + encryption of the previous block
+    cipher_txt += cipher
+
+    #for all remaining blocks
+    for b in range(1, len(blocks)):
+
+        # xor next block with the encryption of the previous block
+        input = bytes( a ^ b for a, b in zip(cipher, blocks[b]))
+        cipher = AES_encrypt(key, input)
+        cipher_txt += cipher
+
+    return cipher_txt
+    
+    
 # function will split message into blocks
 # first blocks will be 16 bytes long
 # next block is any remaining bytes to be padded
@@ -86,8 +109,4 @@ p_con_s = b''.join([password, salt])
 # hash p||s 250x using SHA-256 from hashlib
 AES_key = Hash_func(p_con_s, 250)
 
-test_message = b"12345678901234567890"
-
-test_salt = secrets.token_hex(8)
-
-print(AES_key)
+test_message = b"1234567890"
