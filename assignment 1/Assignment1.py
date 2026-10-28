@@ -24,7 +24,6 @@ def Mod_expo(base, power, modulus):
     # print(f"number -> {base} || power -> {power} || modulus -> {modulus} || result -> {y}")
     return y
 
-
 # function to convert power to binary
 def Binary(a):
     bin = ""
@@ -35,8 +34,9 @@ def Binary(a):
 
 # function will encrypt file bin using AES key and initial Vector
 def CBC_Encrypt(plain_txt, key, in_vec):
-    blocks = [Pad_Block(plain_txt)]
-    cipher = ""
+    blocks = Split_Message(plain_txt)
+    for b in blocks:
+        print(b)
 
 # function will split message into blocks
 # first blocks will be 16 bytes long
@@ -49,6 +49,7 @@ def Split_Message(message):
     #length will be in bytes otherwise
     length_block = hex(len(message) * 8).encode()
     for i in range(0, len(message), 16):
+        # add padding if needed, then append to list blocks
         b = Pad_Block(message[i: i+ 16])
         blocks.append(b)
     blocks.append(length_block)
@@ -87,5 +88,6 @@ AES_key = Hash_func(p_con_s, 250)
 
 test_message = b"12345678901234567890"
 
-blocks = Split_Message(test_message)
-print(blocks)
+test_salt = secrets.token_bytes(5)
+
+print(test_salt)
