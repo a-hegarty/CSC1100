@@ -43,8 +43,11 @@ def Block_Pad(message):
     # 128 bits is 16 bytes
     # hence mod 16
     pad_len = 16 - len(message) % 16
-    padded_data = (b'\\0x00' * pad_len)
-    return message + padded_data
+    if pad_len % 16 == 0:
+        return message
+    else:
+        padded_data = (b'\\0x00' * pad_len)
+        return message + padded_data
 
 # read generated salt from salt.txt
 salt_file = "Salt.txt"
@@ -68,7 +71,7 @@ p_con_s = b''.join([password, salt])
 # hash p||s 250x using SHA-256 from hashlib
 AES_key = Hash_func(p_con_s, 250)
 
-test_message = b'hello, my name is elder price, and I would like to share with you the most amazing book.'
+test_message = b'abcdefghijklmnop'
 
 ciphertext = Block_Pad(test_message)
 
