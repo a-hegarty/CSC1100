@@ -5,7 +5,7 @@ from cryptography.hazmat.backends import default_backend
 
 # function hashes input b, n times
 def Hash_func(b, n):
-    # data = hashlib.sha256() # produces 512 bit key
+    # data = hashlib.sha256() # produces 512 bit key, which causes error when encrypting in ECB mode
     data = hashlib.md5() # produces 256 bit key as required by project specifications
     for _ in range(n):
         data.update(b)
@@ -31,7 +31,7 @@ def Binary(a):
         a //= 2
     return str(bin)
 
-# function 
+# function encrypts a given input using AES encryption and Key
 def AES_encrypt(key, input):
    e = Cipher(algorithm=algorithms.AES(key), 
                     mode=modes.ECB(), 
@@ -107,8 +107,11 @@ iv_file = "IV.txt"
 with open(iv_file, mode="rb") as f:
     init_vector = f.read()
 
-#Read chosen password from Password.txt
-password = b'd1edb39ab2b21d57'
+#Read chosen password from Password_hex.txt
+# password = b'd1edb39ab2b21d57'
+pass_file = "Password_hex.txt"
+with open(pass_file, mode="rb") as f:
+    password = f.read()
 
 #concatenate password || salt
 p_con_s = b''.join([password, salt])
@@ -117,7 +120,7 @@ p_con_s = b''.join([password, salt])
 AES_key = Hash_func(p_con_s, 250).encode()
 
 ciphertext = CBC_Chain(plaintext, AES_key, init_vector)
-# print(ciphertext)
+print(ciphertext)
 
 pass_hex = "0x" + password.decode()
 pass_hex = int(pass_hex, 16)
@@ -129,7 +132,3 @@ N='0xbec6a8f10c13bfdcaf255ff5fef28f9c2349ade9e99a38841ad797d4dce43e7de880e274509
 
 N = int(N, 16)
 
-print(Right_left_Mod_expo(123, 5, 511))
-print(Right_left_Mod_expo(2, 37, 77))
-print(Right_left_Mod_expo(51, 13, 77))
-# print(Mod_expo(pass_hex, E, N))
