@@ -10,23 +10,17 @@ def Hash_func(b, n):
     for _ in range(n):
         data.update(b)
     return data.hexdigest()
-    
-# modular exponentiation function via GeeksforGeeks
-def Mod_expo(base, power, modulus):
-    # power = Binary(power)
-    y = 1
-    while power >= 1:
-        if power % 2 == 1: # if exponent is odd
-            y = (y * base) % modulus
-            power -= 1
-        else: # if exponent is even
-            base = (base * base) % modulus
-            power //= 2
-    return y
 
+#Right to left modular exponentiation function
 def Right_left_Mod_expo(base, power, modulo):
     y = 1
     power = Binary(power)[::-1] # reveses the string for right-to left exponentiation
+    for i in range(0, len(power)):
+        # if the bit is set
+        if power[i] == "1":
+            y = (y * base) % modulo
+        # the base is squared for all new bits
+        base = (base ** 2) % modulo
     return y
 
 # function to convert power to binary
@@ -135,7 +129,7 @@ N='0xbec6a8f10c13bfdcaf255ff5fef28f9c2349ade9e99a38841ad797d4dce43e7de880e274509
 
 N = int(N, 16)
 
-print(Mod_expo(123, 5, 511))
-print(Mod_expo(2, 37, 77))
-print(Mod_expo(51, 13, 77))
-print(Mod_expo(pass_hex, E, N))
+print(Right_left_Mod_expo(123, 5, 511))
+print(Right_left_Mod_expo(2, 37, 77))
+print(Right_left_Mod_expo(51, 13, 77))
+# print(Mod_expo(pass_hex, E, N))
