@@ -6,11 +6,10 @@ from cryptography.hazmat.backends import default_backend
 # function hashes input b, n times
 def Hash_func(b, n):
 
-    # data = hashlib.sha256() # produces 512 bit key, which causes error when encrypting in ECB mode
-    data = hashlib.md5() # produces 256 bit key as required by project specifications & ECB mode limitations
+    data = hashlib.sha256() # produces 512 bit key, which causes error when encrypting in ECB mode
     for _ in range(n):
         data.update(b)
-    return data.hexdigest()
+    return data.digest()
 
 #Right to left modular exponentiation function
 def Right_left_Mod_expo(base, power, modulo):
@@ -125,7 +124,7 @@ with open(pass_file, mode="rb") as f:
 p_con_s = b''.join([password, salt])
 
 # hash p||s 250x using SHA-256 from hashlib
-AES_key = Hash_func(p_con_s, 250).encode()
+AES_key = Hash_func(p_con_s, 250)
 
 ciphertext = CBC_Chain(plaintext, AES_key, init_vector)
 print(ciphertext)
