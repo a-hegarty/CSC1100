@@ -79,7 +79,7 @@ def Split_Message(message):
 
     #length of the block is multiplied by 8 to give the lenght of the message in bits
     #length will be in bytes otherwise
-    length_block = hex(len(message) * 8).encode()
+    length_block = b'%032x' % (len(message) * 8)
     for i in range(0, len(message), 16):
 
         # add padding if needed, then append to list blocks
@@ -127,5 +127,9 @@ p_con_s = b''.join([password, salt])
 # hash p||s 250x using SHA-256 from hashlib
 AES_key = Hash_func(p_con_s, 250).encode()
 
-ciphertext = CBC_Chain(plaintext, AES_key, init_vector)
-print(ciphertext)
+# ciphertext = CBC_Chain(plaintext, AES_key, init_vector)
+# print(ciphertext)
+
+test = b'12345678901234567890'
+
+print(Split_Message(test))
