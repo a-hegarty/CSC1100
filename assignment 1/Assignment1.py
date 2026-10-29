@@ -115,7 +115,6 @@ with open(iv_file, mode="rb") as f:
     init_vector = f.read()
 
 #Read chosen password from Password_hex.txt
-# password = d1edb39ab2b21d57
 pass_file = "Password_hex.txt"
 with open(pass_file, mode="rb") as f:
     password = f.read()
