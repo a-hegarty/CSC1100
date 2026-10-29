@@ -127,9 +127,5 @@ p_con_s = b''.join([password, salt])
 # hash p||s 250x using SHA-256 from hashlib
 AES_key = Hash_func(p_con_s, 250).encode()
 
-# ciphertext = CBC_Chain(plaintext, AES_key, init_vector)
-# print(ciphertext)
-
-test = b'12345678901234567890'
-
-print(Split_Message(test))
+ciphertext = CBC_Chain(plaintext, AES_key, init_vector)
+print(ciphertext)
